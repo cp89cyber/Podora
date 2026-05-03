@@ -2,7 +2,7 @@ import dns from 'node:dns/promises';
 import net from 'node:net';
 import { normalizePodcastFeed, type NormalizedPodcastFeed } from '../src/lib/rss';
 
-const MAX_FEED_BYTES = 3_000_000;
+const MAX_FEED_BYTES = 8_000_000;
 const MAX_REDIRECTS = 3;
 const FETCH_TIMEOUT_MS = 12_000;
 
