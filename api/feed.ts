@@ -1,8 +1,8 @@
 import dns from 'node:dns/promises';
 import net from 'node:net';
-import { normalizePodcastFeed, type NormalizedPodcastFeed } from '../src/lib/rss';
+import { normalizePodcastFeed, type NormalizedPodcastFeed } from '../src/lib/rss.ts';
 
-const MAX_FEED_BYTES = 3_000_000;
+const MAX_FEED_BYTES = 8_000_000;
 const MAX_REDIRECTS = 3;
 const FETCH_TIMEOUT_MS = 12_000;
 
@@ -14,18 +14,19 @@ interface FeedRequest {
 }
 
 interface FeedResponse {
-  status: (statusCode: number) => FeedResponse;
+  status?: (statusCode: number) => FeedResponse;
+  statusCode?: number;
   setHeader: (name: string, value: string) => void;
   send: (body: string) => void;
 }
 
 export class FeedProxyError extends Error {
-  constructor(
-    message: string,
-    public readonly statusCode = 400
-  ) {
+  readonly statusCode: number;
+
+  constructor(message: string, statusCode = 400) {
     super(message);
     this.name = 'FeedProxyError';
+    this.statusCode = statusCode;
   }
 }
 
@@ -62,7 +63,11 @@ export default async function handler(req: FeedRequest, res: FeedResponse) {
 }
 
 function writeJson(res: FeedResponse, statusCode: number, body: unknown) {
-  res.status(statusCode);
+  if (res.status) {
+    res.status(statusCode);
+  } else {
+    res.statusCode = statusCode;
+  }
   res.setHeader('content-type', 'application/json; charset=utf-8');
   res.send(JSON.stringify(body));
 }
