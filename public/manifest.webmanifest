@@ -1,0 +1,19 @@
+{
+  "name": "Podora",
+  "short_name": "Podora",
+  "description": "A mobile progressive web app podcast player.",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "orientation": "portrait",
+  "background_color": "#f7f8fb",
+  "theme_color": "#f15a3d",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
